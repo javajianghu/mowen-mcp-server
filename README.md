@@ -1,14 +1,14 @@
-# 墨问笔记 MCP 服务器
+# 1. 墨问笔记 MCP 服务器
 
-这是一个基于**模型上下文协议（MCP）**的服务器，用于与墨问笔记软件进行交互。通过此服务器，你可以在支持MCP的应用（如Cursor、Claude Desktop等）中直接创建、编辑和管理墨问笔记。
+这是一个基于**模型上下文协议（MCP）**的服务器，用于与墨问笔记软件进行交互。通过此服务器，你可以在支持MCP的应用（如国外的：Cursor、Claude Desktop，国内的：Trae、Cherry Studio 等等）中直接创建、编辑和管理墨问笔记。
 
 本项目由一支烟花社区和墨问合作共创。
 
 **✨ 最新版本特性：统一的富文本接口设计，支持引用段落和内链笔记，所有笔记操作使用一致的参数格式。**
 
-## 🆕 新功能预览 (v1.0.1)
+## 1.1. 🆕 新功能预览 (v1.0.1)
 
-### 📝 引用段落
+### 1.1.1. 📝 引用段落
 ```python
 {
     "type": "quote",
@@ -19,7 +19,7 @@
 }
 ```
 
-### 🔗 内链笔记
+### 1.1.2. 🔗 内链笔记
 ```python
 {
     "type": "note",
@@ -28,7 +28,7 @@
 ```
 
 
-## 功能特性
+## 1.2. 功能特性
 
 - 🔗 **兼容MCP协议**：支持最新的MCP 1.9.1版本
 - 📝 **创建笔记**：统一的富文本格式，支持段落、加粗、高亮、链接、引用和内链笔记
@@ -39,17 +39,17 @@
 - 🔄 **密钥管理**：重置API密钥功能
 - 🎨 **统一接口**：所有笔记操作使用一致的富文本参数格式
 
-## 快速开始
+## 1.3. 快速开始
 
-### 前提条件
+### 1.3.1. 前提条件
 
-- Python 3.8+
+- Python 3.10+
 - 墨问Pro会员账号（API功能仅对Pro会员开放）
 - 墨问API密钥（在墨问小程序中获取）
 
-### 安装方式
+### 1.3.2. 安装方式
 
-#### 方式一：从源码安装（推荐）
+#### 1.3.2.1. 方式一：从源码安装（推荐）
 
 1. **克隆项目**：
 ```bash
@@ -58,37 +58,51 @@ cd mowen-mcp-server
 ```
 
 2. **安装依赖**：
+
+   2.1 如果本地非3.10+的python环境，就安装miniconda管理环境。
+
+   安装教程：[anaconda | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/)
+
+   ```
+   conda create --name mowen-mcp python=3.10
+   conda activate mowen-mcp
+   pip install -e .
+   ```
+
+   2.2 如果是3.10+环境，直接运行
 ```bash
 pip install -e .
 ```
 
-#### 方式二：直接安装依赖
+#### 1.3.2.2. 方式二：直接安装依赖
 
 ```bash
 pip install mcp httpx pydantic
 ```
 
-### 配置 API 密钥
+### 1.3.3. 配置 API 密钥
 
-#### Windows PowerShell
+#### 1.3.3.1. 系统环境变量方式
+
+##### 1.3.3.1. 1 Windows PowerShell
 ```powershell
 $env:MOWEN_API_KEY="你的墨问API密钥"
 ```
 
-#### Linux/macOS
+##### 1.3.3.1.2. Linux/macOS
 ```bash
 export MOWEN_API_KEY="你的墨问API密钥"
 ```
 
-#### 持久化设置
-创建 `.env` 文件：
+#### 1.3.3.2  .env 持久化文件方式
+修改.env.template文件为.env，并修改MOWEN_API_KEY的值。
 ```
 MOWEN_API_KEY=你的墨问API密钥
 ```
 
-### 配置 MCP 客户端
+### 1.3.4. 配置 MCP 客户端
 
-#### 方式一：模块安装方式（推荐）
+#### 1.3.4.1. 方式一：模块安装方式（推荐）
 
 如果你使用了 `pip install -e .` 安装，在 Cursor 设置中添加：
 
@@ -104,9 +118,19 @@ MOWEN_API_KEY=你的墨问API密钥
     }
   }
 }
+
+如果使用.env 文件设置了环境变量，env:{}就可以不写，配置信息如下：
+{
+  "mcpServers": {
+    "mowen-mcp-server": {
+      "command": "python",
+      "args": ["-m", "mowen_mcp_server.server"]
+    }
+  }
+}
 ```
 
-#### 方式二：直接文件路径方式
+#### 1.3.4.2. 方式二：直接文件路径方式
 
 如果你没有安装包，可以直接指定文件路径：
 
@@ -128,9 +152,9 @@ MOWEN_API_KEY=你的墨问API密钥
 - Windows: `"D:/CODE/mowen-mcp-server/src/mowen_mcp_server/server.py"`
 - macOS/Linux: `"/home/user/mowen-mcp-server/src/mowen_mcp_server/server.py"`
 
-## 可用工具
+## 1.4. 可用工具
 
-### create_note
+### 1.4.1. create_note
 创建一篇新的墨问笔记，使用统一的富文本格式
 
 **参数：**
@@ -179,7 +203,7 @@ MOWEN_API_KEY=你的墨问API密钥
 ]
 ```
 
-### edit_note
+### 1.4.2. edit_note
 编辑已存在的笔记内容，使用统一的富文本格式
 
 **参数：**
@@ -188,7 +212,7 @@ MOWEN_API_KEY=你的墨问API密钥
 
 **注意：** 此操作会完全替换笔记的原有内容，而不是追加内容。支持所有段落类型（普通段落、引用段落、内链笔记）。
 
-### set_note_privacy
+### 1.4.3. set_note_privacy
 设置笔记的隐私权限
 
 **参数：**
@@ -197,14 +221,14 @@ MOWEN_API_KEY=你的墨问API密钥
 - `no_share` (布尔值，可选)：是否禁止分享（仅rule类型有效）
 - `expire_at` (整数，可选)：过期时间戳（仅rule类型有效，0表示永不过期）
 
-### reset_api_key
+### 1.4.4. reset_api_key
 重置墨问API密钥
 
 **注意：** 此操作会使当前密钥立即失效
 
-## 使用示例
+## 1.5. 使用示例
 
-### 创建简单文本笔记
+### 1.5.1. 创建简单文本笔记
 ```python
 # 通过MCP工具调用
 create_note(
@@ -220,7 +244,7 @@ create_note(
 )
 ```
 
-### 创建富文本笔记
+### 1.5.2. 创建富文本笔记
 ```python
 # 通过MCP工具调用
 create_note(
@@ -243,7 +267,7 @@ create_note(
 )
 ```
 
-### 创建包含引用和内链的复杂笔记
+### 1.5.3. 创建包含引用和内链的复杂笔记
 ```python
 # 通过MCP工具调用
 create_note(
@@ -275,7 +299,7 @@ create_note(
 )
 ```
 
-### 编辑笔记
+### 1.5.4. 编辑笔记
 ```python
 # 通过MCP工具调用
 edit_note(
@@ -302,7 +326,7 @@ edit_note(
 )
 ```
 
-## API配额限制
+## 1.6. API配额限制
 
 根据墨问API文档，各接口有以下限制：
 
@@ -312,7 +336,7 @@ edit_note(
 | 笔记编辑 | 1000 次/天 | 1次/秒  | 调用成功才计为 1 次，**即：每天可以基于 API 编辑 1000 次**  |
 | 笔记设置 | 100 次/天  | 1次/秒  | 调用成功才计为 1 次                             |
 
-## 项目结构
+## 1.7. 项目结构
 
 ```
 mowen-mcp-server/
@@ -329,50 +353,50 @@ mowen-mcp-server/
 └── 墨问API.md               # 墨问API详细文档
 ```
 
-## 相关文档
+## 1.8. 相关文档
 
 - **墨问 API 在线文档**: [https://mowen.apifox.cn/](https://mowen.apifox.cn/)
 - **本地API文档**: 详细的墨问API文档请参考项目中的 `墨问API.md` 文件
 - **MCP协议文档**: [Model Context Protocol](https://modelcontextprotocol.io/)
 
-## 常见问题
+## 1.9. 常见问题
 
-### Q: 为什么模块方式运行不起来？
+### 1.9.1. Q: 为什么模块方式运行不起来？
 A: 请确保使用 `pip install -e .` 安装了包，或者使用直接文件路径的配置方式。
 
-### Q: API密钥在哪里获取？
+### 1.9.2. Q: API密钥在哪里获取？
 A: 登录墨问小程序，在设置中找到API密钥管理，需要Pro会员权限。
 
-### Q: 能编辑小程序创建的笔记吗？
+### 1.9.3. Q: 能编辑小程序创建的笔记吗？
 A: 目前不支持，只能编辑通过API创建的笔记。
 
-### Q: 如何使用引用段落和内链笔记？
+### 1.9.4. Q: 如何使用引用段落和内链笔记？
 A: 引用段落使用 `{"type": "quote", "texts": [...]}` 格式，内链笔记使用 `{"type": "note", "note_id": "笔记ID"}` 格式。引用段落支持所有富文本格式（加粗、高亮、链接）。
 
-### Q: 内链笔记的note_id从哪里获取？
+### 1.9.5. Q: 内链笔记的note_id从哪里获取？
 A: note_id是创建笔记时返回的笔记ID，或者是墨问中已存在笔记的ID。注意只能引用通过API创建的笔记。
 
-### Q: 为什么只有paragraphs参数，没有简单的content参数？
+### 1.9.6. Q: 为什么只有paragraphs参数，没有简单的content参数？
 A: 我们统一了接口设计，使用富文本格式可以支持更丰富的内容。即使是简单文本，也可以很容易地使用paragraphs格式：`[{"texts": [{"text": "你的文本"}]}]`
 
-### Q: 如何从旧版本的API调用迁移？
+### 1.9.7. Q: 如何从旧版本的API调用迁移？
 A: 如果之前使用 `create_note(content="文本")`，现在需要改为 `create_note(paragraphs=[{"texts": [{"text": "文本"}]}])`。富文本功能保持不变。
 
-## 开发贡献
+## 1.10. 开发贡献
 
 欢迎提交Issue和Pull Request！
 
-### 开发环境设置
+### 1.10.1. 开发环境设置
 
 1. 克隆项目
 2. 安装开发依赖：`pip install -e .`
 3. 设置API密钥环境变量
 4. 运行测试
 
-## 许可证
+## 1.11. 许可证
 
 本项目采用MIT许可证。详见 [LICENSE](LICENSE) 文件。
 
-## 免责声明
+## 1.12. 免责声明
 
 本项目为个人开发的第三方工具，与墨问官方无关。使用前请确保遵守墨问的服务条款。 
